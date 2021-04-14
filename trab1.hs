@@ -274,11 +274,12 @@ remove_igual x (y:ys) = if x == y then remove_igual x ys
     else (y:(remove_igual x ys))
 
 testa_diag::Int -> [Int] -> Bool
-testa_diag 0 _ = True
+testa_diag _ [] = True
+testa_diag _ [_] = True
 testa_diag n (x:y:xs)
-    | abs(x-y) == 1 = False
-    | otherwise = testa_diag (n-1) (y:[z | z <- xs, abs(x - z) == 1])
+    | abs(x-y) == n = False
+    | otherwise = testa_diag (n+1) (x:xs)
 
 gera_tab :: Int -> [Int] -> [[Int]]
 gera_tab 0 _ = [[]]
-gera_tab n coluna = [x:xs | x <- coluna, xs <- gera_tab (n-1) (remove_igual x coluna)]
+gera_tab n coluna = [x:xs | x <- coluna, xs <- gera_tab (n-1) (remove_igual x coluna), testa_diag 1 (x:xs)]
